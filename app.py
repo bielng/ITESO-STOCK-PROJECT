@@ -432,35 +432,78 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 # ---------- Gemini AI Recommendation ----------
-st.subheader("AI Stock Recommendation")
-if st.button("Generate Recommendation", type="primary"):
-    with st.spinner("Analyzing with Gemini AI..."):
-        # Prepare prompt with stock data summary
-        summary = f"""
-        Stock: {symbol} ({STOCK_DATA[symbol]['name']})
-        Period: {period}
-        Current Price: ${latest['Close']:.2f}
-        Change: {delta:+.2f} ({delta_pct:+.2f}%)
-        Volume: {latest['Volume']:,.0f}
-        High: ${df['High'].max():.2f} | Low: ${df['Low'].min():.2f}
-        SMA20: ${df['SMA20'].iloc[-1]:.2f if 'SMA20' in df else 'N/A'}
-        EMA20: ${df['EMA20'].iloc[-1]:.2f if 'EMA20' in df else 'N/A'}
-        Trend: {'Upward' if delta_pct > 0 else 'Downward'} over last {len(df)} days.
+# st.subheader("AI Stock Recommendation")
+# if st.button("Generate Recommendation", type="primary"):
+#     with st.spinner("Analyzing with Gemini AI..."):
+#         # Prepare prompt with stock data summary
+#         summary = f"""
+#         Stock: {symbol} ({STOCK_DATA[symbol]['name']})
+#         Period: {period}
+#         Current Price: ${latest['Close']:.2f}
+#         Change: {delta:+.2f} ({delta_pct:+.2f}%)
+#         Volume: {latest['Volume']:,.0f}
+#         High: ${df['High'].max():.2f} | Low: ${df['Low'].min():.2f}
+#         SMA20: ${df['SMA20'].iloc[-1]:.2f if 'SMA20' in df else 'N/A'}
+#         EMA20: ${df['EMA20'].iloc[-1]:.2f if 'EMA20' in df else 'N/A'}
+#         Trend: {'Upward' if delta_pct > 0 else 'Downward'} over last {len(df)} days.
         
-        Recommend BUY, SELL, or HOLD. Give 1-2 sentence reason based on trends, volume, and indicators. Keep it concise and neutral (not financial advice).
-        """
+#         Recommend BUY, SELL, or HOLD. Give 1-2 sentence reason based on trends, volume, and indicators. Keep it concise and neutral (not financial advice).
+#         """
         
-        response = model.generate_content(summary)
-        st.markdown(
-            f"""
-            <div class="ai-card">
-                <div class="ai-title">Gemini AI Recommendation</div>
-                <div class="ai-response">{response.text}</div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+#         response = model.generate_content(summary)
+#         st.markdown(
+#             f"""
+#             <div class="ai-card">
+#                 <div class="ai-title">Gemini AI Recommendation</div>
+#                 <div class="ai-response">{response.text}</div>
+#             </div>
+#             """,
+#             unsafe_allow_html=True
+#         )
+# ---------- Gemini AI Recommendation ----------
+st.subheader("Gemini AI Stock Recommendation")
 
+if st.button("Generate AI Recommendation", type="primary", use_container_width=True):
+    with st.spinner("Gemini is analyzing the market..."):
+        # Safely get indicator values (avoid format error)
+        sma20_val = df['SMA20'].iloc[-1] if 'SMA20' in df.columns and not df['SMA20'].isna().all() else None
+        ema20_val = df['EMA20'].iloc[-1] if 'EMA20' in df.columns and not df['EMA20'].isna().all() else None
+
+        sma_text = f"${sma20_val:.2f}" if sma20_val is not None else "Not available"
+        ema_text = f"${ema20_val:.2f}" if ema20_val is not None else "Not available"
+
+        # Build clean summary
+        summary = f"""
+        Analyze {symbol} ({STOCK_DATA[symbol]['name']}) over the last {period} period:
+        - Current price: ${latest['Close']:.2f}
+        - Daily change: {delta:+.2f} ({delta_pct:+.2f}%)
+        - Volume: {latest['Volume']:,.0f}
+        - Period high: ${df['High'].max():.2f}
+        - Period low: ${df['Low'].min():.2f}
+        - SMA20: {sma_text}
+        - EMA20: {ema_text}
+        - Price vs SMA20: {'Above' if latest['Close'] > sma20_val else 'Below' if sma20_val else 'N/A'}
+        
+        Give a short, clear recommendation: BUY, SELL or HOLD.
+        One sentence reason. Keep it neutral and technical (not financial advice).
+        """
+
+        try:
+            response = model.generate_content(summary)
+            st.success("Gemini AI Analysis Complete")
+            st.markdown(
+                f"""
+                <div class="ai-card">
+                    <div class="ai-title">Gemini AI Recommendation</div>
+                    <div class="ai-response"><strong>{response.text}</strong></div>
+                    <small>Powered by Google Gemini • Not financial advice</small>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        except Exception as e:
+            st.error(f"Gemini API error: {str(e)}")
+            st.info("Check your API key in `.streamlit/secrets.toml` or rate limits.")
 # ---------- Table ----------
 st.subheader("Historical Data")
 disp = df.copy()
