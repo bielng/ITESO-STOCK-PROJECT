@@ -508,6 +508,7 @@ if st.button("Generate AI Recommendation", type="primary", use_container_width=T
 st.subheader("Historical Data")
 disp = df.copy()
 disp.index = disp.index.strftime("%Y-%m-%d")
+
 disp = disp.round(2)
 st.dataframe(disp, use_container_width=True)
 
