@@ -252,7 +252,7 @@ genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-2.0-flash')
 
 # ---------- Page ----------
-st.set_page_config(page_title="Stock Dashboard Pro", layout="wide")
+st.set_page_config(page_title="Live Stock Dashboard", layout="wide")
 st.markdown(
     """
     <style>
