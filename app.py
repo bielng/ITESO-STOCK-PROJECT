@@ -272,8 +272,8 @@ st.markdown(
 st.markdown('<h1 class="big-font">STOCK DASHBOARD PRO</h1>', unsafe_allow_html=True)
 
 # ---------- Hard-coded Keys ----------
-API_KEY    = "PKIB3ZFEANA46ZPRPIUZR5DOHN"
-API_SECRET = "5vz3pZvr5anSeT3V7jQDyZVRgsnh7suhJtXDf27khFtG"
+API_KEY    = "PKKHRKHZZGZX3WOGAXKTBEEVQY"
+API_SECRET = "44rqaD9egG5jmTZkWnPzFiomphBrV9gZDrynbxTJGxig"
 
 # ---------- Group by Sector ----------
 SECTORS = {}
