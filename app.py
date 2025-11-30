@@ -260,9 +260,9 @@ st.markdown(
     .kpi-card {background-color: #161B22; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);}
     .kpi-value {font-size: 28px; font-weight: 600; color: #00D4AA;}
     .kpi-label {font-size: 14px; color: #B0B8C4; margin-top: 5px;}
-    .ai-card {background: linear-gradient(135deg, #161B22 0%, #1A1F2E 100%); padding: 20px; border-radius: 12px; border-left: 4px solid #00D4AA;}
+    .ai-card {background: linear-gradient(135deg, #161B22 0%, #1A1F2E 100%); padding: 21px; border-radius: 12px; border-left: 4px solid #00D4AA;}
     .ai-title {color: #00D4AA; font-weight: bold; margin-bottom: 10px;}
-    .ai-response {color: #FAFAFA; line-height: 1.6; font-size: 16px;}
+    .ai-response {color: #FAFAFA; line-height: 1.7; font-size: 16px;}
     </style>
     """,
     unsafe_allow_html=True
